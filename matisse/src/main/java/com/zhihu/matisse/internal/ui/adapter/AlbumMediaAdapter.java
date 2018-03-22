@@ -27,12 +27,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.Album;
+import com.zhihu.matisse.internal.entity.IncapableCause;
 import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
-import com.zhihu.matisse.internal.entity.IncapableCause;
 import com.zhihu.matisse.internal.model.SelectedItemCollection;
 import com.zhihu.matisse.internal.ui.widget.CheckView;
 import com.zhihu.matisse.internal.ui.widget.MediaGrid;
@@ -121,39 +120,6 @@ public class AlbumMediaAdapter extends
             ));
             mediaViewHolder.mMediaGrid.bindMedia(item);
             mediaViewHolder.mMediaGrid.setOnMediaGridClickListener(this);
-            setCheckStatus(item, mediaViewHolder.mMediaGrid);
-        }
-    }
-
-    private void setCheckStatus(Item item, MediaGrid mediaGrid) {
-        if (mSelectionSpec.countable) {
-            int checkedNum = mSelectedCollection.checkedNumOf(item);
-            if (checkedNum > 0) {
-                mediaGrid.setCheckEnabled(true);
-                mediaGrid.setCheckedNum(checkedNum);
-            } else {
-                if (mSelectedCollection.maxSelectableReached()) {
-                    mediaGrid.setCheckEnabled(false);
-                    mediaGrid.setCheckedNum(CheckView.UNCHECKED);
-                } else {
-                    mediaGrid.setCheckEnabled(true);
-                    mediaGrid.setCheckedNum(checkedNum);
-                }
-            }
-        } else {
-            boolean selected = mSelectedCollection.isSelected(item);
-            if (selected) {
-                mediaGrid.setCheckEnabled(true);
-                mediaGrid.setChecked(true);
-            } else {
-                if (mSelectedCollection.maxSelectableReached()) {
-                    mediaGrid.setCheckEnabled(false);
-                    mediaGrid.setChecked(false);
-                } else {
-                    mediaGrid.setCheckEnabled(true);
-                    mediaGrid.setChecked(false);
-                }
-            }
         }
     }
 
@@ -165,7 +131,7 @@ public class AlbumMediaAdapter extends
     }
 
     @Override
-    public void onCheckViewClicked(CheckView checkView, Item item, RecyclerView.ViewHolder holder) {
+    public void onCheckViewClicked(Item item, RecyclerView.ViewHolder holder) {
         if (mSelectionSpec.countable) {
             int checkedNum = mSelectedCollection.checkedNumOf(item);
             if (checkedNum == CheckView.UNCHECKED) {
@@ -212,34 +178,8 @@ public class AlbumMediaAdapter extends
         mCheckStateListener = listener;
     }
 
-    public void unregisterCheckStateListener() {
-        mCheckStateListener = null;
-    }
-
     public void registerOnMediaClickListener(OnMediaClickListener listener) {
         mOnMediaClickListener = listener;
-    }
-
-    public void unregisterOnMediaClickListener() {
-        mOnMediaClickListener = null;
-    }
-
-    public void refreshSelection() {
-        GridLayoutManager layoutManager = (GridLayoutManager) mRecyclerView.getLayoutManager();
-        int first = layoutManager.findFirstVisibleItemPosition();
-        int last = layoutManager.findLastVisibleItemPosition();
-        if (first == -1 || last == -1) {
-            return;
-        }
-        Cursor cursor = getCursor();
-        for (int i = first; i <= last; i++) {
-            RecyclerView.ViewHolder holder = mRecyclerView.findViewHolderForAdapterPosition(first);
-            if (holder instanceof MediaViewHolder) {
-                if (cursor.moveToPosition(i)) {
-                    setCheckStatus(Item.valueOf(cursor), ((MediaViewHolder) holder).mMediaGrid);
-                }
-            }
-        }
     }
 
     private int getImageResize(Context context) {
