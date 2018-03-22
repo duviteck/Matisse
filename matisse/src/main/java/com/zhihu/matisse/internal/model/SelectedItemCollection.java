@@ -16,18 +16,14 @@
 package com.zhihu.matisse.internal.model;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.internal.entity.IncapableCause;
 import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
-import com.zhihu.matisse.internal.ui.widget.CheckView;
 import com.zhihu.matisse.internal.utils.PathUtils;
 import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
-
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -167,47 +163,11 @@ public class SelectedItemCollection {
     }
 
     public IncapableCause isAcceptable(Item item) {
-        if (maxSelectableReached()) {
-            int maxSelectable = currentMaxSelectable();
-            String cause;
-
-            try {
-                cause = mContext.getResources().getQuantityString(
-                        R.plurals.error_over_count,
-                        maxSelectable,
-                        maxSelectable
-                );
-            } catch (Resources.NotFoundException e) {
-                cause = mContext.getString(
-                        R.string.error_over_count,
-                        maxSelectable
-                );
-            }
-
-            return new IncapableCause(cause);
-        } else if (typeConflict(item)) {
+        if (typeConflict(item)) {
             return new IncapableCause(mContext.getString(R.string.error_type_conflict));
         }
 
         return PhotoMetadataUtils.isAcceptable(mContext, item);
-    }
-
-    public boolean maxSelectableReached() {
-        return mItems.size() == currentMaxSelectable();
-    }
-
-    // depends
-    private int currentMaxSelectable() {
-        SelectionSpec spec = SelectionSpec.getInstance();
-        if (spec.maxSelectable > 0) {
-            return spec.maxSelectable;
-        } else if (mCollectionType == COLLECTION_IMAGE) {
-            return spec.maxImageSelectable;
-        } else if (mCollectionType == COLLECTION_VIDEO) {
-            return spec.maxVideoSelectable;
-        } else {
-            return spec.maxSelectable;
-        }
     }
 
     public int getCollectionType() {
@@ -242,10 +202,5 @@ public class SelectedItemCollection {
 
     public int count() {
         return mItems.size();
-    }
-
-    public int checkedNumOf(Item item) {
-        int index = new ArrayList<>(mItems).indexOf(item);
-        return index == -1 ? CheckView.UNCHECKED : index + 1;
     }
 }

@@ -33,7 +33,6 @@ import com.zhihu.matisse.internal.entity.IncapableCause;
 import com.zhihu.matisse.internal.entity.Item;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
 import com.zhihu.matisse.internal.model.SelectedItemCollection;
-import com.zhihu.matisse.internal.ui.widget.CheckView;
 import com.zhihu.matisse.internal.ui.widget.MediaGrid;
 
 public class AlbumMediaAdapter extends
@@ -125,34 +124,13 @@ public class AlbumMediaAdapter extends
 
     @Override
     public void onThumbnailClicked(ImageView thumbnail, Item item, RecyclerView.ViewHolder holder) {
+        if (assertAddSelection(holder.itemView.getContext(), item)) {
+            mSelectedCollection.add(item);
+            notifyCheckStateChanged();
+        }
+
         if (mOnMediaClickListener != null) {
             mOnMediaClickListener.onMediaClick(null, item, holder.getAdapterPosition());
-        }
-    }
-
-    @Override
-    public void onCheckViewClicked(Item item, RecyclerView.ViewHolder holder) {
-        if (mSelectionSpec.countable) {
-            int checkedNum = mSelectedCollection.checkedNumOf(item);
-            if (checkedNum == CheckView.UNCHECKED) {
-                if (assertAddSelection(holder.itemView.getContext(), item)) {
-                    mSelectedCollection.add(item);
-                    notifyCheckStateChanged();
-                }
-            } else {
-                mSelectedCollection.remove(item);
-                notifyCheckStateChanged();
-            }
-        } else {
-            if (mSelectedCollection.isSelected(item)) {
-                mSelectedCollection.remove(item);
-                notifyCheckStateChanged();
-            } else {
-                if (assertAddSelection(holder.itemView.getContext(), item)) {
-                    mSelectedCollection.add(item);
-                    notifyCheckStateChanged();
-                }
-            }
         }
     }
 

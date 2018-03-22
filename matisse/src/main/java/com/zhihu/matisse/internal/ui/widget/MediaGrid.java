@@ -47,14 +47,13 @@ public class MediaGrid extends SquareFrameLayout implements View.OnClickListener
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.media_grid_content, this, true);
 
-        mThumbnail = (ImageView) findViewById(R.id.media_thumbnail);
+        mThumbnail = findViewById(R.id.media_thumbnail);
         mThumbnail.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if (mListener != null) {
-            mListener.onCheckViewClicked(mMedia, mPreBindInfo.mViewHolder);
             mListener.onThumbnailClicked(mThumbnail, mMedia, mPreBindInfo.mViewHolder);
         }
     }
@@ -89,8 +88,6 @@ public class MediaGrid extends SquareFrameLayout implements View.OnClickListener
     public interface OnMediaGridClickListener {
 
         void onThumbnailClicked(ImageView thumbnail, Item item, RecyclerView.ViewHolder holder);
-
-        void onCheckViewClicked(Item item, RecyclerView.ViewHolder holder);
     }
 
     public static class PreBindInfo {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.zhihu.matisse.engine.impl;
+package com.zhihu.matisse.engine;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.widget.ImageView;
 import com.bumptech.glide.Priority;
 import com.zhihu.matisse.GlideApp;
-import com.zhihu.matisse.engine.ImageEngine;
 
 /**
  * {@link ImageEngine} implementation using Glide.

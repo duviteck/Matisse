@@ -24,13 +24,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
-
+import com.zhihu.matisse.engine.GlideEngine;
 import com.zhihu.matisse.engine.ImageEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 import com.zhihu.matisse.internal.entity.SelectionSpec;
 import com.zhihu.matisse.ui.MatisseActivity;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -268,9 +267,7 @@ public final class SelectionCreator {
     /**
      * Provide an image engine.
      * <p>
-     * There are two built-in image engines:
-     * 1. {@link com.zhihu.matisse.engine.impl.GlideEngine}
-     * 2. {@link com.zhihu.matisse.engine.impl.PicassoEngine}
+     * There is one built-in image engines: {@link GlideEngine}
      * And you can implement your own image engine.
      *
      * @param imageEngine {@link ImageEngine}
